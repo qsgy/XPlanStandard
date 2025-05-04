@@ -23,7 +23,20 @@ namespace XPlanStandard.Models.Planner.Single
         /// </summary>
         TimeSpan MaxComputeTimePerPath { get; set; }
     }
-    public class SinglePathTask: ISingleTask
+
+    public class SinglePathTask4PDPS : SinglePathTaskBase
+    {
+        /// <summary>
+        /// 返回null代表无碰撞。返回碰撞的JointValue。
+        /// 建议使用PS的simulatePlay来进行检验。最好支持RCS。
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="phase"></param>
+        /// <returns></returns>
+        public Func<JointValue, JointValue, JointValue> MotionCheck { get; set; }
+    }
+    public class SinglePathTaskBase : ISingleTask
     {
         /// <summary>
         /// 目标路径点
@@ -54,16 +67,8 @@ namespace XPlanStandard.Models.Planner.Single
         /// </summary>
         public double? UseConstantGunAxis { get; set; }
         /// <summary>
-        /// 返回null代表无碰撞。返回碰撞的JointValue。如果设置为null，将使用内置的插补算法调用StateCheck检测。
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="phase"></param>
-        /// <returns></returns>
-        public Func<JointValue, JointValue, MotionCheckPhase, JointValue> MotionCheck { get; set; }
-        /// <summary>
         /// int PathID目前规划到第几个路径（从0开始），int Iteration目前路径迭代次数，string msg消息提示。
         /// </summary>
-        public Action<int,int,string> OnLog { get; set; }
+        public Action<int, int, string> OnLog { get; set; }
     }
 }
